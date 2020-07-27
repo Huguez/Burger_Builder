@@ -11,10 +11,16 @@ const controls =[
 ];
 
 
-const BuildControls = () => (
+const BuildControls = (props) => (
     <div className={ classes.BuildControls }> 
         { controls.map( ctrl=> ( 
-            <BuildControl key={ ctrl.label }  label={ ctrl.label }/>
+
+            <BuildControl 
+                type={ ctrl.type }
+                remove={ () => props.removed( ctrl.type ) }
+                add={ () => props.added( ctrl.type ) }
+                key={ ctrl.label }
+                label={ ctrl.label } />
          ) ) }
     </div>
 );
