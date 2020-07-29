@@ -41,8 +41,8 @@ class BurguerIngredients extends Component {
 }
 
 BurguerIngredients.propTypes = { 
-    type: propTypes.string.isRequired 
- };
+    type: propTypes.string.isRequired
+};
 
 
 
