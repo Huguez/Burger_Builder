@@ -14,45 +14,36 @@ const INGREDIENT_PRICES = {
     meat: 1
  };
 
+ const PRICE_BASE = 3.5;
+
 class BurgerBuilder extends Component {
     
     state = {
         ingredientes: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0
+            salad: 1,
+            bacon: 1,
+            cheese: 1,
+            meat: 1
         },
         purchasable: false,
         purchasing: false,
-        totalPrice: 3.5
+        totalPrice: PRICE_BASE
     };
     
 
     addIngredient = ( type ) => {
         const oldCount = this.state.ingredientes[type];
+        
         const updateCount = oldCount + 1;
+        
         const updateIngredients = { ...this.state.ingredientes };
         updateIngredients[type] = updateCount;
     
         let priceAddition = INGREDIENT_PRICES[type];
         
-        if( priceAddition === undefined ){
-            priceAddition = INGREDIENT_PRICES[type];
-            console.log("INGREDIENT_PRICES[type]: ", INGREDIENT_PRICES[type] );
-            console.log("priceAddition: ", priceAddition );
-        }
-
-        const oldPrice = this.state.totalPrice;
+        const oldPrice = this.state.totalPrice; // Aqui
         
-        const newPrice = oldPrice + priceAddition;
-        
-        // console.log("priceAddition: ", priceAddition );
-        // console.log("type: ", type );
-        
-        // console.log("oldPrice: ", oldPrice );
-        
-        // console.log("newPrice: ", newPrice );
+        const newPrice =  oldCount === 0 ? PRICE_BASE : oldPrice + priceAddition;
         
         this.setState( { ingredientes: updateIngredients, totalPrice: newPrice } );
         this.updatePurchaseableState( updateIngredients );
@@ -63,7 +54,7 @@ class BurgerBuilder extends Component {
         const oldPrice = this.state.totalPrice;
         
         if( oldCount <= 0 ){
-            console.log("wawa");
+            // console.log("wawa");
             return;
         }
 
@@ -74,14 +65,6 @@ class BurgerBuilder extends Component {
         const priceDedution = INGREDIENT_PRICES[type];
         
         const newPrice = updateCount > 0  ? oldPrice - priceDedution  : oldPrice ;
-        
-        // console.log("oldCount: ", oldCount );
-        
-        // console.log("priceDedution: ", priceDedution );
-        
-        // console.log("oldPrice: ", oldPrice );
-        
-        // console.log("newPrice: ", newPrice );
         
         this.setState( { ingredientes: updateIngredients, totalPrice: newPrice } );
 
