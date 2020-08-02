@@ -6,6 +6,8 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
+import instance from '../../axios-orders';
+
 
 const INGREDIENT_PRICES = { 
     salad: 1,
@@ -52,11 +54,6 @@ class BurgerBuilder extends Component {
     removeIngredient = ( type ) => {
         const oldCount = this.state.ingredientes[type];
         const oldPrice = this.state.totalPrice;
-        
-        if( oldCount <= 0 ){
-            // console.log("wawa");
-            return;
-        }
 
         const updateCount = oldCount - 1;
         const updateIngredients = { ...this.state.ingredientes };
@@ -100,7 +97,22 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinue = () => {
-        alert( "you continue without me !!!" );
+        const order ={
+            ingredients: this.state.ingredientes,
+            price: this.state.totalPrice,
+            customer: {
+                name: 'Huguez',
+                addres: {
+                    street: 'calle 123',
+                    zipcode: '12345',
+                    country: 'Mexico' 
+                },
+                email: 'carlos.huguez@test.com'
+            },
+            deliveryMethod: 'fastest'
+        }
+
+        instance.post('/orders.json', order ).then( response => console.log(response) ).catch(error => console.log(error) );        
     }
 
     render(){
