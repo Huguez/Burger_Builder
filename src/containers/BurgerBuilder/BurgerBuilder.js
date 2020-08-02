@@ -6,6 +6,8 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
+import Spinner from '../../components/UI/spinner/spinner'
+
 import instance from '../../axios-orders';
 
 
@@ -29,6 +31,7 @@ class BurgerBuilder extends Component {
         },
         purchasable: false,
         purchasing: false,
+        loading: false,
         totalPrice: PRICE_BASE
     };
     
@@ -65,8 +68,6 @@ class BurgerBuilder extends Component {
         
         this.setState( { ingredientes: updateIngredients, totalPrice: newPrice } );
 
-        console.log( this.state.ingredientes );
-
         // console.log(updateIngredients);
         this.updatePurchaseableState( updateIngredients );
     }
@@ -97,6 +98,8 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinue = () => {
+        this.setState( { loading: true } );
+
         const order ={
             ingredients: this.state.ingredientes,
             price: this.state.totalPrice,
@@ -112,29 +115,49 @@ class BurgerBuilder extends Component {
             deliveryMethod: 'fastest'
         }
 
-        instance.post('/orders.json', order ).then( response => console.log(response) ).catch(error => console.log(error) );        
+        instance.post('/orders.json', order ).then( 
+            ( response ) => {
+                this.setState( { loading: false, purchasing: false } );    
+            }
+            ).catch(
+                ( error ) => {
+                this.setState( { loading: false, purchasing: false } );    
+            }
+        );        
     }
 
     render(){
-        const disableInfo ={ ...this.state.ingredientes };
+        const disableInfo = { ...this.state.ingredientes };
+        
+        let count = 0;
+        
         for (let key in disableInfo) {
+            count = disableInfo[key] > 0 ?  count + 1 : count ;
             disableInfo[key] = disableInfo[key] <= 0;
         }
-        // console.log(this.state.totalPrice);
+        
+        let boleano = count >= 1 ? true : false;
+        
+        let orderSummary = <OrderSummary
+                                price={ this.state.totalPrice }  
+                                purchaseCanceled={ this.cancelPuchase }
+                                purchaseContinued={ this.purchaseContinue }
+                                ingredientes={ this.state.ingredientes } />
+
+        if( this.state.loading ){
+            orderSummary = <Spinner />
+        }
+
         return (
             <Aux>
                 <Modal show={ this.state.purchasing } modalClose={ this.cancelPuchase }  >
-                    <OrderSummary
-                        price={ this.state.totalPrice }  
-                        purchaseCanceled={ this.cancelPuchase }
-                        purchaseContinued={ this.purchaseContinue }
-                        ingredientes={ this.state.ingredientes } />
+                    { orderSummary }
                 </Modal>
 
                 <Burger ingredientes={ this.state.ingredientes }/>
                 <BuildControls
                     ordered={ this.puchase } 
-                    purchasable={ this.state.purchasable }
+                    purchasable={ boleano }
                     price={ this.state.totalPrice } 
                     disable={ disableInfo } 
                     removed={ this.removeIngredient } 
