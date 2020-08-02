@@ -36,7 +36,8 @@ class BurgerBuilder extends Component {
         purchasable: false,
         purchasing: false,
         loading: false,
-        totalPrice: PRICE_BASE
+        totalPrice: PRICE_BASE,
+        error: null
     };
     
 
@@ -136,7 +137,7 @@ class BurgerBuilder extends Component {
             this.setState({ ingredientes: response.data });
 
             // console.log(response.data); 
-        } );
+        } ).catch( error =>{ this.setState( { error: true } ) } );
     }
 
     render(){
@@ -153,7 +154,7 @@ class BurgerBuilder extends Component {
 
         let orderSummary = null
 
-        let burger = <Spinner />;
+        let burger = this.state.error ? <h3 style={{ textAlign : 'center' }} >Los Ingredientes No pueden cargar!!! </h3> : <Spinner />;
 
         if( this.state.ingredientes ){
             burger = (
