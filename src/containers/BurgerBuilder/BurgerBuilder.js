@@ -4,6 +4,8 @@ import Aux from '../../hoc/Aux/Aux';
 import Burger from  '../../components/Burger/Burger'
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
+
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 import Spinner from '../../components/UI/spinner/spinner'
@@ -136,7 +138,7 @@ class BurgerBuilder extends Component {
             disableInfo[key] = disableInfo[key] <= 0;
         }
         
-        let boleano = count >= 1 ? true : false;
+        const boleano = count >= 1 ? true : false;
         
         let orderSummary = <OrderSummary
                                 price={ this.state.totalPrice }  
@@ -167,4 +169,4 @@ class BurgerBuilder extends Component {
     }
 }
 
-export default BurgerBuilder;
+export default withErrorHandler(BurgerBuilder, instance);
