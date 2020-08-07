@@ -103,35 +103,37 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinue = () => {
-        this.setState( { loading: true } );
+        // this.setState( { loading: true } );
 
-        const order ={
-            ingredients: this.state.ingredientes,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Huguez',
-                addres: {
-                    street: 'calle 123',
-                    zipcode: '12345',
-                    country: 'Mexico' 
-                },
-                email: 'carlos.huguez@test.com'
-            },
-            deliveryMethod: 'fastest'
-        }
+        // const order ={
+        //     ingredients: this.state.ingredientes,
+        //     price: this.state.totalPrice,
+        //     customer: {
+        //         name: 'Huguez',
+        //         addres: {
+        //             street: 'calle 123',
+        //             zipcode: '12345',
+        //             country: 'Mexico' 
+        //         },
+        //         email: 'carlos.huguez@test.com'
+        //     },
+        //     deliveryMethod: 'fastest'
+        // }
 
-        instance.post('/orders.json', order ).then( 
-            ( response ) => {
-                this.setState( { loading: false, purchasing: false } );    
-            }
-            ).catch(
-                ( error ) => {
-                this.setState( { loading: false, purchasing: false } );    
-            }
-        );        
+        // instance.post('/orders.json', order ).then( 
+        //     ( response ) => {
+        //         this.setState( { loading: false, purchasing: false } );    
+        //     }
+        //     ).catch(
+        //         ( error ) => {
+        //         this.setState( { loading: false, purchasing: false } );    
+        //     }
+        // );
+        this.props.history.push('/checkout');        
     }
 
     componentDidMount(){
+        console.log(this.props);
         instance.get( 'https://burguer-app-b2532.firebaseio.com/ingrediendts.json' ).then( response =>{ 
         
             this.setState({ ingredientes: response.data });
