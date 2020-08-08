@@ -13,12 +13,12 @@ class Orders extends Component {
     componentDidMount(){
         instance.get( '/orders.json' ).then( ( resp ) =>{
             const fetchOrders = [];
-            let aux;
+//            let aux;
             for( let key in resp.data ){
                 fetchOrders.push( { ...resp.data[key], id: key } );
 
-                aux = resp.data[key].ingredients;
-                console.log( aux );
+                // aux = resp.data[key];
+                // console.log( aux );
 
             }
 
@@ -28,7 +28,13 @@ class Orders extends Component {
     }
 
     render(){
-        return (  <div> <Order/> </div> );
+        return (
+            <div> 
+                { this.state.orders.map( ( order ) => {
+                    return <Order price={order.price } ingredients={ order.ingredients }  key={ order.id } />
+                } ) }
+            </div>
+        );
     }
 }
 

@@ -8,10 +8,10 @@ import ContactData from './ContactData/ContactData'
 class Checkout extends Component {
     state={
         ingredients: null,
-        totalPrice: 0
+        totalPrice: null
     }
 
-    componentWillMount(){
+    UNSAFE_componentWillMount(){
         const query = new URLSearchParams( this.props.location.search );
         const ingredientes= {};
 
@@ -20,9 +20,10 @@ class Checkout extends Component {
         for( let param of query.entries() ){
 
             if( param[0] === 'price' ){
-                price = param[1];
+                price = parseFloat( param[1] );
+            }else{
+                ingredientes[param[0]] = parseInt(param[1], 10);
             }
-            ingredientes[param[0]] = parseInt(param[1], 10);
         }
         
         this.setState( { ingredients: ingredientes, totalPrice: price} );
@@ -37,6 +38,7 @@ class Checkout extends Component {
     }
 
     render(){
+        // console.log(this.state.totalPrice);
         return ( 
             <div>
                 <CheckoutSummary 

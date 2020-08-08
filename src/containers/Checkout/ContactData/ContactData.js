@@ -15,17 +15,19 @@ class ContactData extends Component {
             zipcode: '',
             country: '' 
         },
-        loading: false
+        loading: false,
     }
 
-    order = (event) => {
+    order = ( event ) => {
         event.preventDefault();
 
         this.setState( { loading: true } );
+        
+        // console.log( this.props.price );
 
         const order ={
             ingredients: this.props.ingredientes,
-            price: this.state.totalPrice,
+            price: this.props.price,
             customer: {
                 name: 'Huguez',
                 addres: {
@@ -50,7 +52,7 @@ class ContactData extends Component {
         );
         
 
-        console.log(this.state.ingredientes);
+        // console.log(this.state.ingredientes);
     }
     
     render(){
