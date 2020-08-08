@@ -7,7 +7,7 @@ class BurguerIngredients extends Component {
 
     render(){
         let ingrediente = null;
-
+        
         switch( this.props.type ){
             case ('bread-bottom'):
                 ingrediente = <div className={ clases.BreadBottom }></div>

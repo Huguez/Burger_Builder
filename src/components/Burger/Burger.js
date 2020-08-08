@@ -3,11 +3,13 @@ import classes from './Burger.css';
 import BurgerIngrediant from './BurgerIngredients/BurgerIngredients';
 
 const burger = ( props ) => {
-
+    // console.log("Burger.js->", props);
+    
     let transformedIngredientes = Object.keys( props.ingredientes ).map(
         ( igKey ) => {
             return [...Array( props.ingredientes[igKey] ) ].map( 
                 (_, i) => {
+                    // console.log("Burger.js", igKey, i);
                     return <BurgerIngrediant key={  igKey +"_"+ i } type={ igKey } /> 
                 } 
             )

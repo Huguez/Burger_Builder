@@ -129,11 +129,21 @@ class BurgerBuilder extends Component {
         //         this.setState( { loading: false, purchasing: false } );    
         //     }
         // );
-        this.props.history.push('/checkout');        
+        let queryParams = [];
+        for( let i in this.state.ingredientes ){
+            queryParams.push( encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredientes[i]) );
+        }
+        
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname:'/checkout',
+            search: '?' + queryString
+        });
+        // console.log("BurgerBuilder.js", queryString );
     }
 
     componentDidMount(){
-        console.log(this.props);
+        // console.log(this.props);
         instance.get( 'https://burguer-app-b2532.firebaseio.com/ingrediendts.json' ).then( response =>{ 
         
             this.setState({ ingredientes: response.data });
