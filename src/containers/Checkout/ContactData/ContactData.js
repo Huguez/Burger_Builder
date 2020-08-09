@@ -15,7 +15,7 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Your name'
                 },
-                value: 'Huguez'
+                value: ''
             },
             email: {
                 elementType: 'input',
@@ -23,7 +23,7 @@ class ContactData extends Component {
                     type: 'email',
                     placeholder: 'Your e-mail'
                 },
-                value: 'test@test.com'
+                value: ''
             },
             street: {
                 elementType: 'input',
@@ -31,7 +31,7 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Your street'
                 },
-                value: 'street'
+                value: ''
             },
             zipcode: {
                 elementType: 'input',
@@ -39,7 +39,7 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Your zipcode'
                 },
-                value: '12345'
+                value: ''
             },
             country:  {
                 elementType: 'input',
@@ -47,7 +47,7 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Your Country'
                 },
-                value: 'Sonora'
+                value: ''
             },
             deliveryMethod:{
                 elementType: 'select',
@@ -91,10 +91,16 @@ class ContactData extends Component {
     }
 
     inputchange = ( event, inputId ) =>{
-        //const updateOrderForm = { ...this.state.orderForm };
+        const updateOrderForm = { ...this.state.orderForm };
         
-        // updateOrderForm[inputId];
+        const element = { ...updateOrderForm[inputId] };
+        element.value = event.target.value;
+        
+        updateOrderForm[inputId] = element;
 
+        this.setState( { orderForm: updateOrderForm } );
+
+        console.log( updateOrderForm[inputId] );
     }
     
     render(){
@@ -128,7 +134,7 @@ class ContactData extends Component {
         );
 
         if( this.state.loading ){
-            form =<Spinner/>
+            form = <Spinner/>
         }
 
         return ( form );
