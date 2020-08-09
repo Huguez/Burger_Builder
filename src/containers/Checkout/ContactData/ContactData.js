@@ -3,7 +3,7 @@ import classes from './ContactData.css';
 
 import Button from '../../../components/UI/Button/Button'
 import Spinner from '../../../components/UI/spinner/spinner';
-
+import Input from '../../../components/UI/Input/Input';
 import instance from '../../../axios-orders';
 
 class ContactData extends Component {
@@ -60,10 +60,10 @@ class ContactData extends Component {
             <div className={ classes.ContactData } >
                 <h4>Enter your Contact Data</h4>
                 <form>
-                    <input className={ classes.Input } type="text" name="name"   id="name" placeholder="Your name" />
-                    <input className={ classes.Input } type="email" name="email"  id="email" placeholder="Your e-mail" />
-                    <input className={ classes.Input } type="text" name="street" id="street" placeholder="street" />
-                    <input className={ classes.Input } type="text" name="postal" id="postal" placeholder="Postal Code" />
+                    <Input inputtype="text" name="name"   id="name" placeholder="Your name" />
+                    <Input inputtype="email" name="email"  id="email" placeholder="Your e-mail" />
+                    <Input inputtype="text" name="street" id="street" placeholder="street" />
+                    <Input inputtype="text" name="postal" id="postal" placeholder="Postal Code" />
                     <Button  clicked={ this.order } btnType="Success" >Order</Button>
                 </form>
             </div>
