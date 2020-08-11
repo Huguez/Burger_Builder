@@ -88,7 +88,10 @@ class ContactData extends Component {
                         { value: 'fastest', displayValue: 'Fastest' },
                         { value: 'cheapest', displayValue: 'Cheapest' }
                     ]
-                }
+                },
+                value: 'fastest',
+                valid: true,
+                validatio: {}
             }
         },
         formIsValid: false,
@@ -97,6 +100,10 @@ class ContactData extends Component {
 
     checkValidation( value, rules ){
         let isValid = true;
+
+        if( !rules ){
+            return true;
+        }
 
         if( rules.required ){
             isValid = value.trim() !== '' && isValid ;
@@ -156,9 +163,14 @@ class ContactData extends Component {
 
         updateOrderForm[inputId] = element;
         
-        console.log( element );
         
-        this.setState( { orderForm: updateOrderForm } );
+        let formValid = true;
+        for( let inputIde in updateOrderForm ){
+            formValid = updateOrderForm[inputIde].valid && formValid;
+        }
+        console.log( formValid );
+
+        this.setState( { orderForm: updateOrderForm, formIsValid: formValid } );
     }
     
     render(){
@@ -189,7 +201,7 @@ class ContactData extends Component {
                             }
                         )
                     }
-                    <Button  btnType="Success" >Order</Button>
+                    <Button inhabilitado={ !this.state.formIsValid } btnType="Success" >Order</Button>
                 </form>
             </div>
         );
