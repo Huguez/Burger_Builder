@@ -7,6 +7,7 @@ import Input from '../../../components/UI/Input/Input';
 import instance from '../../../axios-orders';
 
 class ContactData extends Component {
+    
     state = {
         orderForm: {
             name: {
@@ -15,7 +16,13 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Your name'
                 },
-                value: ''
+                value: '',
+                validation:{
+                    required: true,
+                    minLength: 5      
+                },
+                valid: false,
+                touched: false
             },
             email: {
                 elementType: 'input',
@@ -23,7 +30,13 @@ class ContactData extends Component {
                     type: 'email',
                     placeholder: 'Your e-mail'
                 },
-                value: ''
+                value: '',
+                validation:{
+                    required: true,
+                    minLength: 5
+                },
+                valid: false,
+                touched: false
             },
             street: {
                 elementType: 'input',
@@ -31,7 +44,13 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Your street'
                 },
-                value: ''
+                value: '',
+                validation:{
+                    required: true,
+                    minLength: 5
+                },
+                valid: false,
+                touched: false
             },
             zipcode: {
                 elementType: 'input',
@@ -39,7 +58,14 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Your zipcode'
                 },
-                value: ''
+                value: '',
+                validation:{
+                    required: true,
+                    minLength: 5, 
+                    maxLength: 6
+                },
+                valid: false,
+                touched: false
             },
             country:  {
                 elementType: 'input',
@@ -47,7 +73,13 @@ class ContactData extends Component {
                     type: 'text',
                     placeholder: 'Your Country'
                 },
-                value: ''
+                value: '',
+                validation:{
+                    required: true,
+                    minLength: 5
+                },
+                valid: false,
+                touched: false
             },
             deliveryMethod:{
                 elementType: 'select',
@@ -59,20 +91,45 @@ class ContactData extends Component {
                 }
             }
         },
+        formIsValid: false,
         loading: false,
     }
 
+    checkValidation( value, rules ){
+        let isValid = true;
+
+        if( rules.required ){
+            isValid = value.trim() !== '' && isValid ;
+        }
+
+        if( rules.minLength ){
+            isValid = value.length >= rules.minLength && isValid ;
+            // console.log("min: ", isValid );
+        }
+        
+        if( rules.maxLength ){
+            isValid = value.length <= rules.maxLength && isValid ;
+            // console.log("max: ", isValid );
+        }
+
+        return isValid;
+    }
+    
     order = ( event ) => {
         event.preventDefault();
 
         this.setState( { loading: true } );
         
-        // console.log( this.props.price );
+        const formData = {};
+        for( let element in this.state.orderForm ){
+            formData[element] = this.state.orderForm[element].value;
+        }
 
-        const order ={
+        const order = {
             ingredients: this.props.ingredientes,
             price: this.props.price,
-            deliveryMethod: 'fastest'
+            deliveryMethod: 'fastest',
+            orderData: formData
         }
 
         instance.post('/orders.json', order ).then( 
@@ -85,9 +142,6 @@ class ContactData extends Component {
                 this.setState( { loading: false } );    
             }
         );
-        
-
-        // console.log(this.state.ingredientes);
     }
 
     inputchange = ( event, inputId ) =>{
@@ -95,12 +149,16 @@ class ContactData extends Component {
         
         const element = { ...updateOrderForm[inputId] };
         element.value = event.target.value;
+
+        element.valid = this.checkValidation( element.value, element.validation );
         
+        element.touched = true;
+
         updateOrderForm[inputId] = element;
-
+        
+        console.log( element );
+        
         this.setState( { orderForm: updateOrderForm } );
-
-        console.log( updateOrderForm[inputId] );
     }
     
     render(){
@@ -115,11 +173,14 @@ class ContactData extends Component {
         let form = (
             <div className={ classes.ContactData } >
                 <h4>Enter your Contact Data</h4>
-                <form>
+                <form onSubmit={ this.order } >
                     { 
                         arrayInput.map( 
                             ( input ) => { 
-                               return <Input 
+                                return <Input 
+                                    touched={ input.config.touched }
+                                    shouldValidate={ input.config.validation }
+                                    invalid={ !input.config.valid }
                                     changed={ (event) => this.inputchange( event, input.id ) }
                                     key={ input.id }
                                     inputtype={ input.config.elementType } 
@@ -128,15 +189,13 @@ class ContactData extends Component {
                             }
                         )
                     }
-                    <Button  clicked={ this.order } btnType="Success" >Order</Button>
+                    <Button  btnType="Success" >Order</Button>
                 </form>
             </div>
         );
-
         if( this.state.loading ){
             form = <Spinner/>
         }
-
         return ( form );
     }
 }
