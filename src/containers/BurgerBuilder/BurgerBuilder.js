@@ -102,13 +102,15 @@ class BurgerBuilder extends Component {
     }
 
     componentDidMount(){
-        // console.log(this.props );
+        console.log(this.props );
+        this.props.onInitIngredients();
         // instance.get( 'https://burguer-app-b2532.firebaseio.com/ingrediendts.json' ).then( response =>{ 
         
         //     this.setState({ ingredientes: response.data });
 
         //     // console.log(response.data); 
         // } ).catch( error =>{ this.setState( { error: true } ) } );
+
     }
 
     render(){
@@ -125,7 +127,7 @@ class BurgerBuilder extends Component {
 
         let orderSummary = null
 
-        let burger = this.state.error ? <h3 style={{ textAlign : 'center' }} >Los Ingredientes No pueden cargar!!! </h3> : <Spinner />;
+        let burger = this.props.error ? <h3 style={{ textAlign : 'center' }} >Los Ingredientes No pueden cargar!!! </h3> : <Spinner />;
 
         if( this.props.ings ){
             // console.log( "BurgerBuilder ", this.props.ings);
@@ -164,14 +166,16 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => {
     return {
         ings: state.ingredients,
-        price: state.totalPrice 
+        price: state.totalPrice,
+        error: state.error 
     };
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         onIngredientAdded: (ingName) => dispatch( burgerBuilderActions.addIngredient( ingName ) ),
-        onIngredientRemoved: (ingName) => dispatch( burgerBuilderActions.removeIngredient    ( ingName ) )
+        onIngredientRemoved: (ingName) => dispatch( burgerBuilderActions.removeIngredient    ( ingName ) ),
+        onInitIngredients: () => dispatch( burgerBuilderActions.initIngredients() ) 
     };
 }
 
