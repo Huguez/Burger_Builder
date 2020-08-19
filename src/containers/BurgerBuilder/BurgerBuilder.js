@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actionTypes from '../../store/actions';
+// import * as actionTypes from '../../store/actions/actionsTypes';
 
 import Aux from '../../hoc/Aux/Aux';
 
@@ -12,16 +12,15 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
 import Spinner from '../../components/UI/spinner/spinner'
-
 import instance from '../../axios-orders';
 
+
+import * as burgerBuilderActions from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
     
     state = {
-        purchasing: false,
-        loading: false,
-        error: null
+        purchasing: false
     };    
 
     // addIngredient = ( type ) => {
@@ -129,7 +128,7 @@ class BurgerBuilder extends Component {
         let burger = this.state.error ? <h3 style={{ textAlign : 'center' }} >Los Ingredientes No pueden cargar!!! </h3> : <Spinner />;
 
         if( this.props.ings ){
-            console.log( "BurgerBuilder ", this.props.ings);
+            // console.log( "BurgerBuilder ", this.props.ings);
             burger = (
                 <Aux>
                     <Burger ingredientes={ this.props.ings }/>
@@ -150,9 +149,6 @@ class BurgerBuilder extends Component {
 
         }
 
-        if( this.state.loading ){
-            orderSummary = <Spinner />
-        }
 
         return (
             <Aux>
@@ -174,8 +170,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientAdded: (ingName) => dispatch( { type: actionTypes.ADD_INGREDIENT, ingredientName: ingName } ),
-        onIngredientRemoved: (ingName) => dispatch( { type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName } )
+        onIngredientAdded: (ingName) => dispatch( burgerBuilderActions.addIngredient( ingName ) ),
+        onIngredientRemoved: (ingName) => dispatch( burgerBuilderActions.removeIngredient    ( ingName ) )
     };
 }
 

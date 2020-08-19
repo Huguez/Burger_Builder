@@ -1,13 +1,9 @@
-import * as actionTypes from './actions';
+import * as actionTypes from '../actions/actionsTypes';
 
 const initialState = {
-    ingredients: {
-        salad: 0,
-        bacon: 0,
-        cheese: 0,
-        meat: 0
-    },
-    totalPrice: 3.5
+    ingredients: null,
+    totalPrice: 3.5,
+    error: false
 };
 
 const INGREDIENT_PRICES = { 
