@@ -144,15 +144,15 @@ class ContactData extends Component {
         // instance.post('/orders.json', order ).then( 
         //     ( response ) => {
         //         this.setState( { loading: false } );
-        //         this.props.history.push('/');
         //     }
         //     ).catch(
         //         ( error ) => {
         //         this.setState( { loading: false } );    
         //     }
         // );
-
+        
         this.props.onOrderBurger( order )
+        this.props.history.push('/');
     }
 
     inputchange = ( event, inputId ) =>{

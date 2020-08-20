@@ -45,11 +45,12 @@ class Checkout extends Component {
 
     render(){
         let summary = <Redirect to='/' />;
+        console.log(" Checkout ", this.props.ings);
         if( this.props.ings ){
-            const purchasedRedirect = this.props.purchased ?  <Redirect  to='/' /> : null;
+            const purchasedRedirect = this.props.purchased ? <Redirect to="/"/> : null;
             summary = ( 
                 <div>
-                    { purchasedRedirect  }
+                    {purchasedRedirect}
                     <CheckoutSummary 
                         onCheckoutCancelled={ this.cancel }
                         onCheckoutContinue={ this.continue }
