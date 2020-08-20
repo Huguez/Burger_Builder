@@ -97,12 +97,13 @@ class BurgerBuilder extends Component {
         //     pathname:'/checkout',
         //     search: '?' + queryString
         // });
+        this.props.onInitPurchase();
         this.props.history.push('/checkout');
         // console.log("BurgerBuilder.js", queryString );
     }
 
     componentDidMount(){
-        console.log(this.props );
+        // console.log(this.props );
         this.props.onInitIngredients();
         // instance.get( 'https://burguer-app-b2532.firebaseio.com/ingrediendts.json' ).then( response =>{ 
         
@@ -151,7 +152,6 @@ class BurgerBuilder extends Component {
 
         }
 
-
         return (
             <Aux>
                 <Modal show={ this.state.purchasing } modalClose={ this.cancelPuchase }  >
@@ -164,18 +164,21 @@ class BurgerBuilder extends Component {
 }
 
 const mapStateToProps = state => {
+    // console.log  ( state );
     return {
-        ings: state.ingredients,
-        price: state.totalPrice,
-        error: state.error 
+        price: state.burgerBuilder.totalPrice,
+        ings:  state.burgerBuilder.ingredients,
+        error: state.burgerBuilder.error 
     };
 }
 
 const mapDispatchToProps = dispatch => {
+
     return {
         onIngredientAdded: (ingName) => dispatch( burgerBuilderActions.addIngredient( ingName ) ),
         onIngredientRemoved: (ingName) => dispatch( burgerBuilderActions.removeIngredient    ( ingName ) ),
-        onInitIngredients: () => dispatch( burgerBuilderActions.initIngredients() ) 
+        onInitIngredients: () => dispatch( burgerBuilderActions.initIngredients() ) ,
+        onInitPurchase: () => dispatch( burgerBuilderActions.purchaseInit() )
     };
 }
 

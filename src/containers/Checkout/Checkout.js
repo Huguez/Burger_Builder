@@ -2,7 +2,7 @@ import React , { Component } from "react";
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary'
 import { connect } from 'react-redux'
 
-import { Route }from 'react-router-dom';
+import { Route, Redirect }from 'react-router-dom';
 import ContactData from './ContactData/ContactData'
 
 
@@ -30,6 +30,11 @@ class Checkout extends Component {
     //     this.setState( { ingredients: ingredientes, totalPrice: price} );
     // }
 
+    UNSAFE_componentWillMount(){
+        // console.log( this.props );
+        // this.props.onInitPurchase();
+    }
+
     cancel = () =>{
         this.props.history.goBack();
     }
@@ -39,22 +44,33 @@ class Checkout extends Component {
     }
 
     render(){
-        console.log('Checkout: ', this.props );
+        let summary = <Redirect to='/' />;
+        if( this.props.ings ){
+            const purchasedRedirect = this.props.purchased ?  <Redirect  to='/' /> : null;
+            summary = ( 
+                <div>
+                    { purchasedRedirect  }
+                    <CheckoutSummary 
+                        onCheckoutCancelled={ this.cancel }
+                        onCheckoutContinue={ this.continue }
+                        ingredientes={ this.props.ings }/>);
+                    <Route path={ this.props.match.path + '/contact-data' }  component={ ContactData } />
+                </div> 
+            );
+        }
         return ( 
             <div>
-                <CheckoutSummary 
-                    onCheckoutCancelled={ this.cancel }
-                    onCheckoutContinue={ this.continue }
-                    ingredientes={ this.props.ings }/>
-                <Route path={ this.props.match.path + '/contact-data' }  component={ ContactData } />
+                { summary }
             </div>
         );
     }
 }
 
 const mapStateToProps = state => {
+    // console.log(state);
     return {
-        ings: state.ingredients
+        ings: state.burgerBuilder.ingredients,
+        purchased: state.order.puschased
     };
 }
 
