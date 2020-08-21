@@ -8,10 +8,11 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = ( authData ) => {
+export const authSuccess = ( token, userId ) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        authData: authData
+        token: token,
+        userId: userId
     };
 };
 
@@ -22,7 +23,7 @@ export const authFail = (error) =>{
     }
 }
 
-export const auth = ( email, password ) => {
+export const auth = ( email, password, isSignUp ) => {
     return dispatch => {
         dispatch( authStart() );
         const authData = {
@@ -30,17 +31,29 @@ export const auth = ( email, password ) => {
             password: password,
             returnSecureToken: true
         };
-        // AIzaSyAE6H0JoN2W3gvPUGjeJXPSWpyjS7YPOsY
-        // 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='
-        const endPoint = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAE6H0JoN2W3gvPUGjeJXPSWpyjS7YPOsY';
+        
+        const apiKey = 'AIzaSyAE6H0JoN2W3gvPUGjeJXPSWpyjS7YPOsY';
+
+        // You can create a new email and password user 
+        let endPoint = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=';
+        
+        
+        if( !isSignUp ){
+            // You can sign in a user with an email and password 
+            endPoint = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=';
+        }
+        
+        endPoint = endPoint.concat( apiKey );
+
         axios.post( endPoint, authData )
         .then( ( response ) => {
-            console.log(response);
-            dispatch( authSuccess( response.data ) );
+            // console.log(response);
+            dispatch( authSuccess( response.data.idToken, response.data.localId ) );
 
         } )
-        .catch( error => { 
-            dispatch( authFail( error ) ) 
+        .catch( err => {
+            console.log( "error: ", err ); 
+            dispatch( authFail( err.response.data.error ) ) 
         });
     };
 };
