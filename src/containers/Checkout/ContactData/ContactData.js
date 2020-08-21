@@ -140,16 +140,6 @@ class ContactData extends Component {
             price: this.props.price,
             orderData: formData
         }
-
-        // instance.post('/orders.json', order ).then( 
-        //     ( response ) => {
-        //         this.setState( { loading: false } );
-        //     }
-        //     ).catch(
-        //         ( error ) => {
-        //         this.setState( { loading: false } );    
-        //     }
-        // );
         
         this.props.onOrderBurger( order )
         this.props.history.push('/');
