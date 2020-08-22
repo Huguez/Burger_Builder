@@ -23,42 +23,6 @@ class BurgerBuilder extends Component {
         purchasing: false
     };    
 
-    // addIngredient = ( type ) => {
-    //     const oldCount = this.state.ingredientes[type];
-        
-    //     const updateCount = oldCount + 1;
-        
-    //     const updateIngredients = { ...this.state.ingredientes };
-    //     updateIngredients[type] = updateCount;
-    
-    //     let priceAddition = INGREDIENT_PRICES[type];
-        
-    //     const oldPrice = this.state.totalPrice; // Aqui
-        
-    //     const newPrice =  oldCount === 0 ? PRICE_BASE : oldPrice + priceAddition;
-        
-    //     this.setState( { ingredientes: updateIngredients, totalPrice: newPrice } );
-    //     this.updatePurchaseableState( updateIngredients );
-    // }
-    
-    // removeIngredient = ( type ) => {
-    //     const oldCount = this.state.ingredientes[type];
-    //     const oldPrice = this.state.totalPrice;
-
-    //     const updateCount = oldCount - 1;
-    //     const updateIngredients = { ...this.state.ingredientes };
-    //     updateIngredients[type] = updateCount;
-
-    //     const priceDedution = INGREDIENT_PRICES[type];
-        
-    //     const newPrice = updateCount > 0  ? oldPrice - priceDedution  : oldPrice ;
-        
-    //     this.setState( { ingredientes: updateIngredients, totalPrice: newPrice } );
-
-    //     // console.log(updateIngredients);
-    //     this.updatePurchaseableState( updateIngredients );
-    // }
-
     updatePurchaseableState( ing ){
         // const ing ={
         //     ...this.state.ingredientes
@@ -77,7 +41,12 @@ class BurgerBuilder extends Component {
     }
 
     puchase = () =>  {
-        this.setState( { purchasing: true } );
+        if( this.props.isAuthenticated ){
+            this.setState( { purchasing: true } );
+        }else{
+            this.props.onSetRedirectPath( '/checkout' )
+            this.props.history.push( '/auth' );
+        }
     }
 
     cancelPuchase = () => {
@@ -104,7 +73,7 @@ class BurgerBuilder extends Component {
 
     componentDidMount(){
         // console.log(this.props );
-        this.props.onInitIngredients();
+        this.props.onInitIngredients( this.props.token );
         // instance.get( 'https://burguer-app-b2532.firebaseio.com/ingrediendts.json' ).then( response =>{ 
         
         //     this.setState({ ingredientes: response.data });
@@ -140,7 +109,8 @@ class BurgerBuilder extends Component {
                         purchasable={ this.updatePurchaseableState( this.props.ings ) }
                         price={ this.props.price } 
                         disable={ disableInfo } 
-                        removed={ this.props.onIngredientRemoved } 
+                        removed={ this.props.onIngredientRemoved }
+                        isAuth={ this.props.isAuthenticated } 
                         added={ this.props.onIngredientAdded } />
                 </Aux>
             );
@@ -168,7 +138,9 @@ const mapStateToProps = state => {
     return {
         price: state.burgerBuilder.totalPrice,
         ings:  state.burgerBuilder.ingredients,
-        error: state.burgerBuilder.error 
+        error: state.burgerBuilder.error,
+        token: state.auth.token,
+        isAuthenticated: state.auth.token !== null
     };
 }
 
@@ -176,9 +148,10 @@ const mapDispatchToProps = dispatch => {
 
     return {
         onIngredientAdded: (ingName) => dispatch( burgerBuilderActions.addIngredient( ingName ) ),
-        onIngredientRemoved: (ingName) => dispatch( burgerBuilderActions.removeIngredient    ( ingName ) ),
-        onInitIngredients: () => dispatch( burgerBuilderActions.initIngredients() ) ,
-        onInitPurchase: () => dispatch( burgerBuilderActions.purchaseInit() )
+        onIngredientRemoved: (ingName) => dispatch( burgerBuilderActions.removeIngredient( ingName ) ),
+        onInitIngredients: (token) => dispatch( burgerBuilderActions.initIngredients(token) ) ,
+        onInitPurchase: () => dispatch( burgerBuilderActions.purchaseInit() ),
+        onSetRedirectPath: (path) => dispatch( burgerBuilderActions.setAuthRedirectPath( path ) )
     };
 }
 

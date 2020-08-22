@@ -28,10 +28,12 @@ export const fetchIngredientsFailed = () => {
     };
 }
 
-export const initIngredients = () => {
+export const initIngredients = (token) => {
     return dispatch => {
-        instance.get( 'https://burguer-app-b2532.firebaseio.com/ingrediendts.json' ).then( response =>{ 
-        
+        instance.get( 'https://burguer-app-b2532.firebaseio.com/ingrediendts.json?auth=' + token ).then( response =>{ 
+            
+            // console.log( response.data );
+
             dispatch( setIngredients( response.data ) );
 
         } ).catch( error => { dispatch( fetchIngredientsFailed() ) } );
