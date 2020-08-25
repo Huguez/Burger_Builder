@@ -10,6 +10,8 @@ import instance from '../../../axios-orders';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../../store/actions/index';  
 
+import { updateObject } from '../../../shared/utility';
+
 class ContactData extends Component {
     
     state = {
@@ -147,23 +149,19 @@ class ContactData extends Component {
     }
 
     inputchange = ( event, inputId ) =>{
-        const updateOrderForm = { ...this.state.orderForm };
         
-        const element = { ...updateOrderForm[inputId] };
-        element.value = event.target.value;
-
-        element.valid = this.checkValidation( element.value, element.validation );
+        const element = updateObject( this.state.orderForm[inputId], { 
+            value : event.target.value,
+            valid : this.checkValidation( event.target.value, this.state.orderForm[inputId].validation ),
+            touched : true 
+        } );
         
-        element.touched = true;
-
-        updateOrderForm[inputId] = element;
-        
+        const updateOrderForm = updateObject( this.state.orderForm, { [inputId]: element } );
         
         let formValid = true;
         for( let inputIde in updateOrderForm ){
             formValid = updateOrderForm[inputIde].valid && formValid;
         }
-        // console.log( formValid );
 
         this.setState( { orderForm: updateOrderForm, formIsValid: formValid } );
     }
@@ -208,7 +206,7 @@ class ContactData extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log( "contactData: ", state);
+    // console.log( "contactData: ", state);
     return {
         ings:    state.burgerBuilder.ingredients,
         price:   state.burgerBuilder.totalPrice,
