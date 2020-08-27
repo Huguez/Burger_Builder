@@ -54,7 +54,7 @@ class Checkout extends Component {
                     <CheckoutSummary 
                         onCheckoutCancelled={ this.cancel }
                         onCheckoutContinue={ this.continue }
-                        ingredientes={ this.props.ings }/>);
+                        ingredientes={ this.props.ings }/>
                     <Route path={ this.props.match.path + '/contact-data' }  component={ ContactData } />
                 </div> 
             );

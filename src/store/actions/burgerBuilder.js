@@ -28,11 +28,11 @@ export const fetchIngredientsFailed = () => {
     };
 }
 
-export const initIngredients = (token) => {
+export const initIngredients = () => {
     return dispatch => {
-        instance.get( 'https://burguer-app-b2532.firebaseio.com/ingrediendts.json?auth=' + token ).then( response =>{ 
+        instance.get( 'https://burguer-app-b2532.firebaseio.com/ingrediendts.json' ).then( response =>{ 
             
-            // console.log( response.data );
+            // console.log( "wawa: ", response.data );
 
             dispatch( setIngredients( response.data ) );
 
