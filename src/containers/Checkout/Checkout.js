@@ -9,11 +9,11 @@ import ContactData from './ContactData/ContactData'
 const checkout = props => {
     
     const cancel = () =>{
-        this.props.history.goBack();
+        props.history.goBack();
     }
 
     const continueHandler = () =>{
-        this.props.history.replace('/checkout/contact-data');
+        props.history.replace('/checkout/contact-data');
     }
 
     let summary = <Redirect to='/' />;
