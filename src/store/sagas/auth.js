@@ -67,4 +67,4 @@ export function* authCheckStateSaga( action ){
             yield put( actions.checkAuthTimeout( expirationDate.getSeconds() - new Date().getSeconds() ) )
         }
     }
-} 
+}
