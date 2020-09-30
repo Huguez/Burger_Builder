@@ -68,11 +68,13 @@ const auth = ( props ) => {
         setIsSingUp( !isSingUp );
     }
 
+    const { buildingBurger, authRedirectPath, onSetAuthRedirectPath } = props
+
     useEffect(() => {
-        if( !props.buildingBurger && props.authRedirectPath !== '/' ){
-            this.onSetAuthRedirectPath();
+        if( !buildingBurger && authRedirectPath !== '/' ){
+            onSetAuthRedirectPath();
         }
-    }, [] );
+    }, [ authRedirectPath, buildingBurger, onSetAuthRedirectPath ] );
     
 
     const arrayInput = [];

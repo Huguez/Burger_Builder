@@ -19,6 +19,8 @@ const burgerBuilder  = props => {
     
     const [ purchasing, setPurchasing ] = useState( false );
 
+    const { onInitIngredients } = props;
+
     const updatePurchaseableState = ( ing ) => {
         
         const sum = Object.keys( ing ).map(
@@ -50,8 +52,8 @@ const burgerBuilder  = props => {
     }
 
     useEffect ( () => {
-        props.onInitIngredients();
-    }, [] );
+        onInitIngredients();
+    }, [onInitIngredients] );
 
     const disableInfo = { ...props.ings };
     
